@@ -10,7 +10,7 @@
 #define YYSTYPE char *
 #include <stdio.h>
 #include <string.h>
-#include "y.tab.h"
+#include "parser-defines.h"
 %}
 
 %option outfile="tokenizer.c" header-file="tokenizer.h"
@@ -30,7 +30,8 @@ desktop_environment	{ yylval = strdup(yytext); return VARTOK; }
 window_manager	{ yylval = strdup(yytext); return VARTOK; }
 window_manager_theme	{ yylval = strdup(yytext); return VARTOK; }
 gtk_info	{ yylval = strdup(yytext); return VARTOK; }
-\"[a-zA-Z0-9 ]+\"	{ yylval = strdup(yytext); return PHRASE; }
+[a-zA-Z0-9]+[ ]*[a-zA-Z0-9]+	{ yylval = strdup(yytext); return PHRASE; }
+\"	return QUOTE;
 ;	return SEMICOLON;
 .	;
 \n	;

@@ -8,7 +8,7 @@ PREFIX = /usr/local
 BIN = $(PREFIX)/bin
 MAN = $(PREFIX)/share/man/man1
 
-SOURCES = $(wildcard ./src/*.c)
+SOURCES = $(wildcard ./src/*.c ./src/parser/*.c)
 OBJS = $(SOURCES:.c=.o)
 
 SCRIPTS =

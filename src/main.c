@@ -161,6 +161,12 @@ int main(int argc, char **argv)
 			ERROR_OUT("Error: ", "No ~/.screenfetchc found.");
 			return EXIT_FAILURE;
 		}
+		else
+		{
+			parse_config(config_loc);
+		}
+
+		return 0;
 	}
 	else /* each string is filled by its respective function */
 	{

@@ -10,14 +10,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../disp.h"
-extern int yylex();
-extern int yyparse();
-extern FILE *yyin;
 
-char *str1, *str2;
+extern int yyparse(char *name, char *value);
+extern FILE *yyin;
 
 void parse_config(const char *path)
 {
+	char *name, *value;
 	FILE *f = fopen(path, "r");
 
 	if (!f)
@@ -26,12 +25,23 @@ void parse_config(const char *path)
 		exit(-1);
 	}
 	yyin = f;
-	yyparse();
+
+	do
+	{
+		yyparse(name, value);
+		printf("Name: %s, value: %s\n", name, value);
+	} while (!feof(f));
+
+	// yyparse(name, value);
+	// printf("Name: %s, value: %s\n", name, value);
+	// yyparse(name, value);
+	// printf("Name: %s, value: %s\n", name, value);
+
 }
 
-void yyerror(const char *str)
+void yyerror(char *name, char *value, const char *msg)
 {
-	fprintf(stderr, "error: %s\n", str);
+	ERROR_OUT("Error: ", msg);
 }
 
 int yywrap()
@@ -42,37 +52,39 @@ int yywrap()
 
 %output "parser.c"
 %defines "parser-defines.h"
+%parse-param {char *name} {char *value}
 %define parse.error verbose
-%token VARTOK PHRASE SEMICOLON
+%token VARTOK PHRASE SEMICOLON QUOTE
 
 %%
-commands: commands command
-		| command
-		;
+lines:
+	| /* empty */
+	lines line
+	;
 
-command:
-		var_set SEMICOLON
-		;
+line:
+	var_set SEMICOLON
+	;
 
 var_set:
-		variable var_content
-		{
-			str1 = $1;
-			str2 = $2;
-			printf("Found token %s and word: %s\n", $1, $2);
-		}
-		;
+	variable var_content
+	{
+		printf("Found token %s and word: %s\n", $1, $2);
+		name = $1;
+		value = $2;
+	}
+	;
 
 variable:
-		VARTOK
-		{
-			$$ = $1;
-		}
+	VARTOK
+	{
+		$$ = $1;
+	}
 
 var_content:
-		PHRASE
-		{
-			$$ = $1;
-		}
-		;
+	QUOTE PHRASE QUOTE
+	{
+		$$ = $2;
+	}
+	;
 %%
