@@ -1,3 +1,10 @@
+/*	parser.y
+ *	Author: William Woodruff
+ *	-------------
+ *
+ *	The yacc/bison parser generator used by screenfetch-c on ~/.screenfetchc.
+ *	Like the rest of screenfetch-c, this file is licensed under the MIT license.
+ */
 %{
 #define YYSTYPE char *
 #include <stdio.h>
@@ -33,6 +40,8 @@ int yywrap()
 }
 %}
 
+%output "parser.c"
+%defines "parser-defines.h"
 %define parse.error verbose
 %token VARTOK PHRASE SEMICOLON
 

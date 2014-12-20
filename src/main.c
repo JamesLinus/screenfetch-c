@@ -28,6 +28,7 @@
 #include "misc.h"
 #include "util.h"
 #include "error_flag.h"
+#include "parser/parser.h"
 
 int main(int argc, char **argv)
 {
@@ -150,45 +151,16 @@ int main(int argc, char **argv)
 
 	if (manual) /* triggered by -m (--manual) flag */
 	{
-		int stat = manual_input(detected_arr, verbose);
+		char config_loc[MAX_STRLEN];
 
-		if (stat == EXIT_SUCCESS)
+		safe_strncpy(config_loc, getenv("HOME"), MAX_STRLEN);
+		strncat(config_loc, "/.screenfetchc", MAX_STRLEN);
+
+		if (!FILE_EXISTS(config_loc))
 		{
-			/* these sections are ALWAYS detected */
-			detect_uptime(uptime_str);
-			detect_pkgs(pkgs_str, distro_str);
-			detect_disk(disk_str);
-			detect_mem(mem_str);
-
-			/* if the user specifies an asterisk, fill the data in for them */
-			if (STREQ(distro_str, "*"))
-				detect_distro(distro_str);
-			if (STREQ(arch_str, "*"))
-				detect_arch(arch_str);
-			if (STREQ(host_str, "*"))
-				detect_host(host_str);
-			if (STREQ(kernel_str, "*"))
-				detect_kernel(kernel_str);
-			if (STREQ(cpu_str, "*"))
-				detect_cpu(cpu_str);
-			if (STREQ(gpu_str, "*"))
-				detect_gpu(gpu_str);
-			if (STREQ(shell_str, "*"))
-				detect_shell(shell_str);
-			if (STREQ(res_str, "*"))
-				detect_res(res_str);
-			if (STREQ(de_str, "*"))
-				detect_de(de_str);
-			if (STREQ(wm_str, "*"))
-				detect_wm(wm_str);
-			if (STREQ(wm_theme_str, "*"))
-				detect_wm_theme(wm_theme_str, wm_str);
-			if (STREQ(gtk_str, "*"))
-				detect_gtk(gtk_str);
+			ERROR_OUT("Error: ", "No ~/.screenfetchc found.");
+			return EXIT_FAILURE;
 		}
-
-		else /* if the user decided to leave manual mode without input */
-			return EXIT_SUCCESS;
 	}
 	else /* each string is filled by its respective function */
 	{

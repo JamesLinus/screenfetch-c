@@ -8,6 +8,9 @@
 #ifndef SCREENFETCH_C_MISC_H
 #define SCREENFETCH_C_MISC_H
 
+#include <string.h>
+#include <unistd.h>
+
 #define KB (1024)
 #define MB (KB * KB)
 #define GB (MB * KB)

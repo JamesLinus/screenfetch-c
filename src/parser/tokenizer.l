@@ -1,3 +1,11 @@
+/*	tokenizer.l
+ *	Author: William Woodruff
+ *	-------------
+ *
+ *	The (f)lex tokenizer used by screenfetch-c's configuration file parser.
+ *	Like the rest of screenfetch-c, this file is licensed under the MIT license.
+ */
+
 %{
 #define YYSTYPE char *
 #include <stdio.h>
@@ -5,6 +13,7 @@
 #include "y.tab.h"
 %}
 
+%option outfile="tokenizer.c" header-file="tokenizer.h"
 %option nounput
 %option noinput
 

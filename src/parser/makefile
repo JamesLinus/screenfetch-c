@@ -2,16 +2,16 @@ LEX = flex
 YACC = bison -y
 YFLAGS = -d
 
-all: lex.yy.c y.tab.c
+all: tokenizer.c parser.c
 
-lex.yy.c:
+tokenizer.c:
 	$(LEX) tokenizer.l
 
-y.tab.c:
+parser.c:
 	$(YACC) $(YFLAGS) parser.y
 
 clean:
-	rm -f lex.yy.c y.tab.c y.tab.h
+	rm -f tokenizer.c tokenizer.h parser.c parser-defines.h
 	rm -f *.o
 
 .PHONY: all clean
