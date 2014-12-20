@@ -16,21 +16,22 @@ extern FILE *yyin;
 
 void parse_config(const char *path)
 {
-	char *name, *value;
-	FILE *f = fopen(path, "r");
+	char name[128], value[128];
+	yyin = fopen(path, "r");
 
-	if (!f)
+	if (!yyin)
 	{
 		ERROR_OUT("Error: ", "Could not open the configuration file.");
 		exit(-1);
 	}
-	yyin = f;
 
 	do
 	{
 		yyparse(name, value);
 		printf("Name: %s, value: %s\n", name, value);
-	} while (!feof(f));
+	} while (!feof(yyin));
+
+	fclose(yyin);
 
 	// yyparse(name, value);
 	// printf("Name: %s, value: %s\n", name, value);
@@ -54,35 +55,37 @@ int yywrap()
 %defines "parser-defines.h"
 %parse-param {char *name} {char *value}
 %define parse.error verbose
-%token VARTOK PHRASE SEMICOLON QUOTE
+%token DECLARATION DATA SEMICOLON QUOTE
 
 %%
 lines:
-	| /* empty */
+	|	/* empty */
 	lines line
 	;
 
 line:
-	var_set SEMICOLON
+	declaration SEMICOLON
 	;
 
-var_set:
-	variable var_content
+declaration:
+	variable content
 	{
-		printf("Found token %s and word: %s\n", $1, $2);
-		name = $1;
-		value = $2;
+		printf("Found variable %s and content: %s\n", $1, $2);
+		strncpy(name, $1, 128);
+		strncpy(value, $2, 128);
+		free($1);
+		free($2);
 	}
 	;
 
 variable:
-	VARTOK
+	DECLARATION
 	{
 		$$ = $1;
 	}
 
-var_content:
-	QUOTE PHRASE QUOTE
+content:
+	QUOTE DATA QUOTE
 	{
 		$$ = $2;
 	}
