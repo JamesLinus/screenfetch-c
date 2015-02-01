@@ -1,5 +1,6 @@
 /*	detect.h
  *	Author: William Woodruff
+ *  Edited by: Aaron Caffrey
  *	-------------
  *
  *	The detection functions used by screenfetch-c are prototyped here.
@@ -8,7 +9,7 @@
 
 #ifndef SCREENFETCH_C_DETECT_H
 #define SCREENFETCH_C_DETECT_H
-
+ 
 void detect_distro(char *str1, char *str2);
 void detect_host(char *str1, char *str2);
 void detect_kernel(char *str);

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #  detectgtk
+#  Edited by: Aaron Caffrey
 #  detect and output any GTK information, if present
 #  only meant to be run on Linux/*BSD
 #  DEPENDS UPON: detectde for the name of the DE
@@ -172,16 +173,26 @@ case $DE in
 			if grep -q gtk-theme ${usr_gtkrc_two}; then
 				gtk2Theme=$(awk -F '"' '/^gtk-theme/ {print $2}' ${usr_gtkrc_two})
 			fi
-			if grep -q icon-theme ${usr_gtkrc_two}; then
+			if grep -q gtk-icon-theme ${usr_gtkrc_two}; then
 				gtkIcons=$(awk -F '"' '/^gtk-icon-theme/ {print $2}' ${usr_gtkrc_two})
 			fi
-			if grep -q font ${usr_gtkrc_two}; then
+			if grep -q gtk-font-name ${usr_gtkrc_two}; then
 				gtkFont=$(awk -F '"' '/^gtk-font-name/ {print $2}' ${usr_gtkrc_two})
+			fi
+		fi
+		#/etc/gtk-3.0/settings.ini  Tested on Mint 14,15,16
+		etc_gtk_three='/etc/gtk-3.0/settings.ini'
+		if [[ -f ${etc_gtk_three} && ! -f ${usr_gtkrc_two} && ! -f ${home_gtkrc_mine} && ! -f ${home_gtkrc_two} ]]; then
+			if grep -q gtk-theme ${etc_gtk_three}; then
+				gtk2Theme=$(awk -F '= ' '/^gtk-theme/ {print $2}' ${etc_gtk_three})
+			fi
+			if grep -q gtk-icon-theme-name ${etc_gtk_three}; then
+				gtkIcons=$(awk -F '= ' '/^gtk-icon-theme-name/ {print $2}' ${etc_gtk_three})
 			fi
 		fi
 		# /etc/gtk-2.0/gtkrc compatability
 		etc_gtkrc_two='/etc/gtk-2.0/gtkrc'
-		if [[ -f ${etc_gtkrc_two} && ! -f ${home_gtkrc_two} && ! -f ${home_gtkrc_mine} && ! -f ${usr_gtkrc_two} ]]; then
+		if [[ -f ${etc_gtkrc_two} && ! -f ${home_gtkrc_two} && ! -f ${home_gtkrc_mine} && ! -f ${usr_gtkrc_two} && ! -f ${etc_gtk_three} ]]; then
 			if grep -q gtk-theme-name ${etc_gtkrc_two}; then
 				gtk2Theme=$(awk -F '"' '/^gtk-theme-name/ {print $2}' ${etc_gtkrc_two})
 			fi

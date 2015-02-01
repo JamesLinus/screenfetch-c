@@ -1,5 +1,6 @@
 /*	detect.c
  *	Author: William Woodruff
+ *  Edited by: Aaron Caffrey
  *	-------------
  *
  *	The detection functions used by screenfetch-c on Linux are implemented here.
@@ -30,15 +31,14 @@
 #include "../../misc.h"
 #include "../../disp.h"
 #include "../../util.h"
-#include "../../error_flag.h"
+#include "../../flags.h"
+#include "../../arrays.h"
 
 /*	detect_distro
 	detects the computer's distribution (really only relevant on Linux)
 	argument char *str1: the char array to be filled with the distro name
-	argument char *str2: the char array to be filled with the distro colour
-	so we can print "user@hostname" with the same colour as the detected distro one
 */
-void detect_distro(char *str1, char *str2)
+void detect_distro(char *str1)
 {
 	/* if distro_str was NOT set by the -D flag */
 	if (STREQ(str1, "Unknown"))
@@ -48,10 +48,8 @@ void detect_distro(char *str1, char *str2)
 		char distro_name_str[MAX_STRLEN];
 
 		if (FILE_EXISTS("/system/bin/getprop"))
-		{
 			safe_strncpy(str1, "Android", MAX_STRLEN);
-			sprintf(str2, "%s", TLGN);
-		}
+
 		else
 		{
 			bool detected = false;
@@ -69,67 +67,50 @@ void detect_distro(char *str1, char *str2)
 				{
 					safe_strncpy(str1, "Kali Linux", MAX_STRLEN);
 					detected = true;
-					sprintf(str2, "%s", TLBL);
 				}
 				else if (STREQ(distro_name_str, "Back"))
 				{
 					safe_strncpy(str1, "Backtrack Linux", MAX_STRLEN);
 					detected = true;
-					sprintf(str2, "%s", TLRD);
 				}
 				else if (STREQ(distro_name_str, "Crun"))
 				{
 					safe_strncpy(str1, "CrunchBang", MAX_STRLEN);
 					detected = true;
-					sprintf(str2, "%s", TDGY);
 				}
 				else if (STREQ(distro_name_str, "LMDE"))
 				{
 					safe_strncpy(str1, "LMDE", MAX_STRLEN);
 					detected = true;
-					sprintf(str2, "%s", TLGN);
 				}
 				else if (STREQ(distro_name_str, "Debi")
 						|| STREQ(distro_name_str, "Rasp"))
 				{
 					safe_strncpy(str1, "Debian", MAX_STRLEN);
 					detected = true;
-					sprintf(str2, "%s", TLRD);
 				}
 			}
 
 			if (!detected)
 			{
 				if (FILE_EXISTS("/etc/fedora-release"))
-				{
 					safe_strncpy(str1, "Fedora", MAX_STRLEN);
-					sprintf(str2, "%s", TLBL);
-				}
+
 				else if (FILE_EXISTS("/etc/SuSE-release"))
-				{
 					safe_strncpy(str1, "OpenSUSE", MAX_STRLEN);
-					sprintf(str2, "%s", TLGN);
-				}
+
 				else if (FILE_EXISTS("/etc/arch-release"))
-				{
 					safe_strncpy(str1, "Arch Linux", MAX_STRLEN);
-					sprintf(str2, "%s", TLCY);
-				}
+
 				else if (FILE_EXISTS("/etc/gentoo-release"))
-				{
 					safe_strncpy(str1, "Gentoo", MAX_STRLEN);
-					sprintf(str2, "%s", TLPR);
-				}
+
 				else if (FILE_EXISTS("/etc/angstrom-version"))
-				{
 					safe_strncpy(str1, "Angstrom", MAX_STRLEN);
-					sprintf(str2, "%s", TNRM);
-				}
+
 				else if (FILE_EXISTS("/etc/manjaro-release"))
-				{
 					safe_strncpy(str1, "Manjaro", MAX_STRLEN);
-					sprintf(str2, "%s", TLGN);
-				}
+
 				else if (FILE_EXISTS("/etc/lsb-release"))
 				{
 					distro_file = fopen("/etc/lsb-release", "r");
@@ -137,7 +118,6 @@ void detect_distro(char *str1, char *str2)
 					fclose(distro_file);
 
 					snprintf(str1, MAX_STRLEN, "%s", distro_name_str + 11);
-					sprintf(str2, "%s", TLRD);
 				}
 				else if (FILE_EXISTS("/etc/os-release"))
 				{
@@ -151,12 +131,9 @@ void detect_distro(char *str1, char *str2)
 				else
 				{
 					safe_strncpy(str1, "Linux", MAX_STRLEN);
-					sprintf(str2, "%s", TLGY);
 
 					if (error)
-					{
 						ERR_REPORT("Failed to detect a Linux distro (2).");
-					}
 				}
 			}
 		}
@@ -180,10 +157,8 @@ void detect_distro(char *str1, char *str2)
 
 /*	detect_host
 	detects the computer's hostname and active user and formats them
-	argument char *str1: the char array to be filled with the host info
-	argument char *str2: the passed distro colour for "user@hostname"
 */
-void detect_host(char *str1, char *str2)
+void detect_host(void)
 {
 	char given_user[MAX_STRLEN] = "Unknown";
 	char given_host[MAX_STRLEN] = "Unknown";
@@ -191,25 +166,19 @@ void detect_host(char *str1, char *str2)
 	struct utsname host_info;
 
 	if ((user_info = getpwuid(geteuid())))
-	{
 		safe_strncpy(given_user, user_info->pw_name, MAX_STRLEN);
-	}
+
 	else if (error)
-	{
 		ERR_REPORT("Could not detect username.");
-	}
 	
 	if (!(uname(&host_info)))
-	{
 		safe_strncpy(given_host, host_info.nodename, MAX_STRLEN);
-	}
-	else if (error)
-	{
-		ERR_REPORT("Could not detect hostname.");
-	}
 
-	snprintf(str1, MAX_STRLEN, "%s%s%s%s@%s%s%s%s",
-		str2, given_user, TNRM, TWHT, TNRM, str2, given_host, TNRM);
+	else if (error)
+		ERR_REPORT("Could not detect hostname.");
+
+	snprintf(UseR, MAX_STRLEN, "%s", given_user);
+	snprintf(HosT, MAX_STRLEN, "%s", given_host);
 
 	return;
 }
@@ -242,10 +211,7 @@ void detect_kernel(char *str)
 */
 void detect_uptime(char *str)
 {
-	int secs = 0;
-	int mins = 0;
-	int hrs = 0;
-	int days = 0;
+	unsigned int secs = 0, mins = 0, hrs = 0, days = 0;
 	struct sysinfo si_upt;
 
 	if (!(sysinfo(&si_upt)))
@@ -253,16 +219,32 @@ void detect_uptime(char *str)
 		split_uptime(si_upt.uptime, &secs, &mins, &hrs, &days);
 
 		if (days > 0)
-			snprintf(str, MAX_STRLEN, "%dd %dh %dm %ds", days, hrs, mins, secs);
+			snprintf(str, MAX_STRLEN, "%ud %uh %um %us", days, hrs, mins, secs);
 		else
-			snprintf(str, MAX_STRLEN, "%dh %dm %ds", hrs, mins, secs);
+			snprintf(str, MAX_STRLEN, "%uh %um %us", hrs, mins, secs);
 	}
 	else
-	{
 		ERR_REPORT("Could not detect system uptime.");
-	}
 
 	return;
+}
+
+static unsigned short int glob_packages(char *str1);
+
+static unsigned short int glob_packages(char *str1)
+{
+	unsigned short int packs_num = 0;
+	glob_t gl;
+
+	if (!(glob(str1, GLOB_NOSORT, NULL, &gl)))
+		packs_num = gl.gl_pathc;
+
+	else if (error)
+		ERR_REPORT("Failure while globbing packages.");
+
+	globfree(&gl);
+
+	return packs_num;
 }
 
 /*	detect_pkgs
@@ -272,28 +254,18 @@ void detect_uptime(char *str)
 void detect_pkgs(char *str, const char *distro_str)
 {
 	FILE *pkgs_file;
-	int packages = 0;
-	glob_t gl;
+	unsigned short int packages = 0;
 
 	if (STREQ(distro_str, "Arch Linux")
 		|| STREQ(distro_str, "ParabolaGNU/Linux-libre")
 		|| STREQ(distro_str, "Chakra") || STREQ(distro_str, "Manjaro"))
-	{
-		if (!(glob("/var/lib/pacman/local/*", GLOB_NOSORT, NULL, &gl)))
-		{
-			packages = gl.gl_pathc;
-		}
-		else if (error)
-		{
-			ERR_REPORT("Failure while globbing packages.");
-		}
 
-		globfree(&gl);
-	}
+		packages = glob_packages("/var/lib/pacman/local/*");
+
 	else if (STREQ(distro_str, "Frugalware"))
 	{
 		pkgs_file = popen("pacman-g2 -Q 2> /dev/null | wc -l", "r");
-		fscanf(pkgs_file, "%d", &packages);
+		fscanf(pkgs_file, "%hu", &packages);
 		pclose(pkgs_file);
 	}
 	else if (STREQ(distro_str, "Ubuntu") || STREQ(distro_str, "Lubuntu")
@@ -305,45 +277,15 @@ void detect_pkgs(char *str, const char *distro_str)
 			|| STREQ(distro_str, "elementary OS")
 			|| STREQ(distro_str, "Backtrack Linux")
 			|| STREQ(distro_str, "Kali Linux"))
-	{
-		if (!(glob("/var/lib/dpkg/info/*.list", GLOB_NOSORT, NULL, &gl)))
-		{
-			packages = gl.gl_pathc;
-		}
-		else if (error)
-		{
-			ERR_REPORT("Failure while globbing packages.");
-		}
+		packages = glob_packages("/var/lib/dpkg/info/*.list");
 
-		globfree(&gl);
-	}
 	else if (STREQ(distro_str, "Slackware"))
-	{
-		if (!(glob("/var/log/packages/*", GLOB_NOSORT, NULL, &gl)))
-		{
-			packages = gl.gl_pathc;
-		}
-		else if (error)
-		{
-			ERR_REPORT("Failure while globbing packages.");
-		}
+		packages = glob_packages("/var/log/packages/*");
 
-		globfree(&gl);
-	}
 	else if (STREQ(distro_str, "Gentoo") || STREQ(distro_str, "Sabayon") 
 			|| STREQ(distro_str, "Funtoo"))
-	{
-		if (!(glob("/var/db/pkg/*/*", GLOB_NOSORT, NULL, &gl)))
-		{
-			packages = gl.gl_pathc;
-		}
-		else if (error)
-		{
-			ERR_REPORT("Failure while globbing packages.");
-		}
+		packages = glob_packages("/var/db/pkg/*/*");
 
-		globfree(&gl);
-	}
 	else if (STREQ(distro_str, "Fuduntu") || STREQ(distro_str, "Fedora")
 			|| STREQ(distro_str, "OpenSUSE")
 			|| STREQ(distro_str, "Red Hat Linux")
@@ -352,13 +294,13 @@ void detect_pkgs(char *str, const char *distro_str)
 	{
 		/* RPM uses Berkeley DBs internally, so this won't change soon */
 		pkgs_file = popen("rpm -qa 2> /dev/null | wc -l", "r");
-		fscanf(pkgs_file, "%d", &packages);
+		fscanf(pkgs_file, "%hu", &packages);
 		pclose(pkgs_file);
 	}
 	else if (STREQ(distro_str, "Angstrom"))
 	{
 		pkgs_file = popen("opkg list-installed 2> /dev/null | wc -l", "r");
-		fscanf(pkgs_file, "%d", &packages);
+		fscanf(pkgs_file, "%hu", &packages);
 		pclose(pkgs_file);
 	}
 	else if (STREQ(distro_str, "Linux")) /* if linux disto detection failed */
@@ -370,7 +312,7 @@ void detect_pkgs(char *str, const char *distro_str)
 						"Linux distro.");
 	}
 
-	snprintf(str, MAX_STRLEN, "%d", packages);
+	snprintf(str, MAX_STRLEN, "%hu", packages);
 
 	return;
 }
@@ -384,12 +326,13 @@ void detect_cpu(char *str)
 	FILE *cpu_file;
 	char cpuinfo_buf[MAX_STRLEN];
 	char *cpuinfo_line;
-	int end;
+	size_t end;
+	unsigned short int i = 0;
 
 	if ((cpu_file = fopen("/proc/cpuinfo", "r")))
 	{
 		/* read past the first 4 lines (#5 is model name) */
-		for (int i = 0; i < 5; i++)
+		for (i = 0; i < 5; i++)
 		{
 			if (!(fgets(cpuinfo_buf, MAX_STRLEN, cpu_file)))
 			{
@@ -412,18 +355,15 @@ void detect_cpu(char *str)
 			cpuinfo_line[end - 1] = '\0';
 
 		if (STREQ(cpuinfo_line, "ARMv6-compatible processor rev 7 (v6l)"))
-		{
 			safe_strncpy(str, "BCM2708 (Raspberry Pi)", MAX_STRLEN);
-		}
+
 		else
-		{
 			safe_strncpy(str, cpuinfo_line, MAX_STRLEN);
-		}
 	}
 	else if (error)
-	{
 		ERR_REPORT("Failed to open /proc/cpuinfo. Ancient Linux kernel?");
-	}
+
+	remove_excess_cpu_txt(str);
 
 	return;
 }
@@ -484,19 +424,17 @@ void detect_gpu(char *str)
 void detect_disk(char *str)
 {
 	struct statvfs disk_info;
-	unsigned long disk_total = 0, disk_used = 0, disk_percentage = 0;
+	unsigned long int disk_total = 0, disk_used = 0, disk_percentage = 0;
 
 	if (!(statvfs(getenv("HOME"), &disk_info)))
 	{
 		disk_total = ((disk_info.f_blocks * disk_info.f_bsize) / GB);
 		disk_used = (((disk_info.f_blocks - disk_info.f_bfree) * disk_info.f_bsize) / GB);
 		disk_percentage = (((float) disk_used / disk_total) * 100);
-		snprintf(str, MAX_STRLEN, "%ldG / %ldG (%ld%%)", disk_used, disk_total, disk_percentage);
+		snprintf(str, MAX_STRLEN, "%luG / %luG (%lu%%)", disk_used, disk_total, disk_percentage);
 	}
 	else if (error)
-	{
 		ERR_REPORT("Could not stat $HOME for filesystem statistics.");
-	}
 
 	return;
 }
@@ -507,7 +445,7 @@ void detect_disk(char *str)
 */
 void detect_mem(char *str)
 {
-	long long total_mem = 0, free_mem = 0, used_mem = 0;
+	unsigned long int total_mem = 0, used_mem = 0;
 	struct sysinfo si_mem;
 
 	/* known problem: because linux utilizes free ram in caches/buffers,
@@ -515,11 +453,11 @@ void detect_mem(char *str)
 	*/
 	sysinfo(&si_mem);
 
-	total_mem = (long long) (si_mem.totalram * si_mem.mem_unit) / MB;
-	free_mem = (long long) (si_mem.freeram * si_mem.mem_unit) / MB;
-	used_mem = (long long) total_mem - free_mem;
+	total_mem = (unsigned long int) (si_mem.totalram * si_mem.mem_unit) / MB;
+	used_mem  = (unsigned long int) ((si_mem.totalram - si_mem.freeram - si_mem.bufferram
+											 - si_mem.sharedram) * si_mem.mem_unit) / MB;
 
-	snprintf(str, MAX_STRLEN, "%lld%s / %lld%s", used_mem, "MB", total_mem, "MB");
+	snprintf(str, MAX_STRLEN, "%lu%s / %lu%s", used_mem, "MB", total_mem, "MB");
 
 	return;
 }
@@ -527,17 +465,12 @@ void detect_mem(char *str)
 /*	detect_shell
 	detects the shell currently running on the computer
 	argument char *str: the char array to be filled with the shell name and version
-	--
-	CAVEAT: shell version detection relies on the standard versioning format for 
-	each shell. If any shell's older (or newer versions) suddenly begin to use a new
-	scheme, the version may be displayed incorrectly.
-	--
 */
 void detect_shell(char *str)
 {
-	FILE *shell_file;
 	char *shell_name;
-	char vers_str[MAX_STRLEN];
+	unsigned short int x = 0;
+	bool found_shell = false;
 
 	if (!(shell_name = getenv("SHELL")))
 	{
@@ -548,43 +481,24 @@ void detect_shell(char *str)
 	}
 
 	if (STREQ(shell_name, "/bin/sh"))
-	{
 		safe_strncpy(str, "POSIX sh", MAX_STRLEN);
-	}
-	else if (strstr(shell_name, "bash"))
+
+	else
 	{
-		shell_file = popen("bash --version | head -1", "r");
-		fgets(vers_str, MAX_STRLEN, shell_file);
-		snprintf(str, MAX_STRLEN, "bash %.*s", 17, vers_str + 10);
-		pclose(shell_file);
+		for (x = 0; x < 4; x++)
+			if (strstr(shell_name, mult_shell_arr[x][1]))
+			{
+				found_shell = true;
+				break;
+			}
+
+		if (found_shell)
+			popen_raw_shell_version(mult_shell_arr[x][0], mult_shell_arr[x][1]);
+		else
+			safe_strncpy(str, shell_name, MAX_STRLEN);
 	}
-	else if (strstr(shell_name, "zsh"))
-	{
-		shell_file = popen("zsh --version", "r");
-		fgets(vers_str, MAX_STRLEN, shell_file);	
-		snprintf(str, MAX_STRLEN, "zsh %.*s", 5, vers_str + 4);
-		pclose(shell_file);
-	}
-	else if (strstr(shell_name, "csh"))
-	{
-		shell_file = popen("csh --version | head -1", "r");
-		fgets(vers_str, MAX_STRLEN, shell_file);
-		snprintf(str, MAX_STRLEN, "csh %.*s", 7, vers_str + 5);
-		pclose(shell_file);
-	}
-	else if (strstr(shell_name, "fish"))
-	{
-		shell_file = popen("fish --version", "r");
-		fgets(vers_str, MAX_STRLEN, shell_file);
-		snprintf(str, MAX_STRLEN, "fish %.*s", 13, vers_str + 6);
-		pclose(shell_file);
-	}
-	else if (strstr(shell_name, "dash") || strstr(shell_name, "ash")
-			|| strstr(shell_name, "ksh"))
-	{
-		/* i don't have a version detection system for these, yet */
-		safe_strncpy(str, shell_name, MAX_STRLEN);
-	}
+	/* Add support for moar shells: "dash", "ash", "ksh"
+		include them in arrays.c */
 
 	return;
 }
@@ -595,7 +509,7 @@ void detect_shell(char *str)
 */
 void detect_res(char *str)
 {
-	int width = 0, height = 0;
+	unsigned short int width = 0, height = 0;
 	Display *disp;
 	Screen *screen;
 
@@ -605,7 +519,7 @@ void detect_res(char *str)
 		width = WidthOfScreen(screen);
 		height = HeightOfScreen(screen);
 
-		snprintf(str, MAX_STRLEN, "%dx%d", width, height);
+		snprintf(str, MAX_STRLEN, "%hux%hu", width, height);
 
 		XCloseDisplay(disp);
 	}
@@ -629,30 +543,24 @@ void detect_de(char *str)
 	char *curr_de;
 
 	if ((curr_de = getenv("XDG_CURRENT_DESKTOP")))
-	{
 		safe_strncpy(str, curr_de, MAX_STRLEN);
-	}
+
 	else
 	{
 		if (getenv("GNOME_DESKTOP_SESSION_ID"))
-		{
 			safe_strncpy(str, "Gnome", MAX_STRLEN);
-		}
+
 		else if (getenv("MATE_DESKTOP_SESSION_ID"))
-		{
 			safe_strncpy(str, "MATE", MAX_STRLEN);
-		}
+
 		else if (getenv("KDE_FULL_SESSION"))
-		{
 			/*	KDE_SESSION_VERSION only exists on KDE4+, so 
 				getenv will return NULL on KDE <= 3.
 			 */
 			snprintf(str, MAX_STRLEN, "KDE%s", getenv("KDE_SESSION_VERSION"));
-		}
+
 		else if (error)
-		{
 			ERR_REPORT("No desktop environment found.");
-		}
 	}
 
 	return;

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #  detectgpu
+#  Edited by: Aaron Caffrey
 #  attempt to detect and output the name and model of the computer's GPU
 #  only meant to be run on Linux/*BSD
 #  Original Author: Brett Bohnenkamper (KittyKatt) in screenfetch-dev

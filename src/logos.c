@@ -1,5 +1,6 @@
 /*  logos.c
  *	Author: William Woodruff
+ *  Edited by: Aaron Caffrey
  *	-------------
  *	
  *	The ASCII logos used by screenfetch-c are initialized in this file.
@@ -58,7 +59,7 @@ char *arch_logo[] =
 /* 18 */
 char *mint_logo[] =
 {
-	"                                       " TNRM,
+	"                                      " TNRM,
 	""TLGN" MMMMMMMMMMMMMMMMMMMMMMMMMmds+.       " TNRM,
 	""TLGN" MMm----::-://////////////oymNMd+`    " TNRM,
 	""TLGN" MMd      "TWHT"/++                "TLGN"-sNMd:   " TNRM,
@@ -81,7 +82,7 @@ char *mint_logo[] =
 /* 18 */
 char *lmde_logo[] =
 {
-	"          "TWHT"`.-::---..            " TNRM,
+	"          "TWHT"`.-::---..           " TNRM,
 	""TLGN"       .:++++ooooosssoo:.      " TNRM,
 	""TLGN"     .+o++::.      `.:oos+.    " TNRM,
 	""TLGN"    :oo:.`             -+oo"TWHT":   " TNRM,
@@ -104,7 +105,7 @@ char *lmde_logo[] =
 /* 18 */
 char *ubuntu_logo[] =
 {
-	""TLRD"                          ./+o+-       " TNRM,
+	""TLRD"                          ./+o+-      " TNRM,
 	""TWHT"                  yyyyy- "TLRD"-yyyyyy+     " TNRM,
 	""TWHT"               "TWHT"://+//////"TLRD"-yyyyyyo     " TNRM,
 	""TYLW"           .++ "TWHT".:/++++++/-"TLRD".+sss/`     " TNRM,
@@ -127,7 +128,7 @@ char *ubuntu_logo[] =
 /* 18 */
 char *debian_logo[] =
 {
-	"  "TWHT"       _,met$$$$$gg.           " TNRM,
+	"  "TWHT"       _,met$$$$$gg.          " TNRM,
 	"  "TWHT"    ,g$$$$$$$$$$$$$$$P.       " TNRM,
 	"  "TWHT"  ,g$$P\"\"       \"\"\"Y$$.\".     " TNRM,
 	"  "TWHT" ,$$P'              `$$$.     " TNRM,
@@ -150,7 +151,7 @@ char *debian_logo[] =
 /* 18 */
 char *crunchbang_logo[] =
 {
-	"                                       "TNRM"",
+	"                                      "TNRM"",
 	"         "TWHT"███        "TWHT"███          "TWHT"███  "TNRM"",
 	"         "TWHT"███        "TWHT"███          "TWHT"███  "TNRM"",
 	"         "TWHT"███        "TWHT"███          "TWHT"███  "TNRM"",
@@ -173,7 +174,7 @@ char *crunchbang_logo[] =
 /* 18 */
 char *gentoo_logo[] =
 {
-	""TLPR"         -/oyddmdhs+:.                " TNRM,
+	""TLPR"         -/oyddmdhs+:.               " TNRM,
 	""TLPR"     -o"TWHT"dNMMMMMMMMNNmhy+"TLPR"-`            " TNRM,
 	""TLPR"   -y"TWHT"NMMMMMMMMMMMNNNmmdhy"TLPR"+-          " TNRM,
 	""TLPR" `o"TWHT"mMMMMMMMMMMMMNmdmmmmddhhy"TLPR"/`       " TNRM,
@@ -196,7 +197,7 @@ char *gentoo_logo[] =
 /* 18 */
 char *funtoo_logo[] =
 {
-	"                                                     " TNRM,
+	"                                                    " TNRM,
 	"                                                    " TNRM,
 	"                                                    " TNRM,
 	"                                                    " TNRM,
@@ -219,7 +220,7 @@ char *funtoo_logo[] =
 /* 18 */
 char *fedora_logo[] =
 {
-	""TLBL"           :/------------://          " TNRM,
+	""TLBL"           :/------------://         " TNRM,
 	""TLBL"        :------------------://       " TNRM,
 	""TLBL"      :-----------"TWHT"/shhdhyo/"TLBL"-://      " TNRM,
 	""TLBL"    /-----------"TWHT"omMMMNNNMMMd/"TLBL"-:/     " TNRM,
@@ -293,7 +294,7 @@ char *openbsd_logo[] =
 /* 18 */
 char *dragonflybsd_logo[] =
 {
-	"                     "TLRD" |                     " TNRM,
+	"                     "TLRD" |                    " TNRM,
 	"                    "TLRD" .-.                   " TNRM,
 	"                   "TYLW" ()"TLRD"I"TYLW"()                  " TNRM,
 	"              "TLRD" \"==.__:-:__.==\"             " TNRM,
@@ -313,27 +314,27 @@ char *dragonflybsd_logo[] =
 	"                   "TLRD"   ^                    " TNRM
 };
 
-/* 20 */
+/* 19 */
 char *netbsd_logo[] =
 {
-	"                                  "TLRD"__,gnnnOCCCCCOObaau,_      " TNRM,
+	"                                  "TLRD"__,gnnnOCCCCCOObaau,_     " TNRM,
 	"   "TWHT"_._                    "TLRD"__,gnnCCCCCCCCOPF\"''              " TNRM,
-	"  "TWHT"(N\\\\\\\\"TLRD"XCbngg,._____.,gnnndCCCCCCCCCCCCF\"___,,,,___          " TNRM,
-	"   "TWHT"\\\\N\\\\\\\\"TLRD"XCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCOOOOPYvv.     " TNRM,
-	"    "TWHT"\\\\N\\\\\\\\"TLRD"XCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCPF\"''               " TNRM,
-	"     "TWHT"\\\\N\\\\\\\\"TLRD"XCCCCCCCCCCCCCCCCCCCCCCCCCOF\"'                     " TNRM,
-	"      "TWHT"\\\\N\\\\\\\\"TLRD"XCCCCCCCCCCCCCCCCCCCCOF\"'                         " TNRM,
-	"       "TWHT"\\\\N\\\\\\\\"TLRD"XCCCCCCCCCCCCCCCPF\"'                             " TNRM,
-	"        "TWHT"\\\\N\\\\\\\\"TLRD"\"PCOCCCOCCFP\"\"                                  " TNRM,
-	"         "TWHT"\\\\N\\                                                " TNRM,
-	"          "TWHT"\\\\N\\                                               " TNRM,
-	"           "TWHT"\\\\N\\                                              " TNRM,
-	"            "TWHT"\\\\NN\\                                            " TNRM,
-	"             "TWHT"\\\\NN\\                                           " TNRM,
-	"              "TWHT"\\\\NNA.                                         " TNRM,
-	"               "TWHT"\\\\NNA,                                        " TNRM,
-	"                "TWHT"\\\\NNN,                                       " TNRM,
-	"                 "TWHT"\\\\NNN\\                                      " TNRM,
+	"  "TWHT"(N\\\\\\\\"TLRD"XCbngg,._____.,gnnndCCCCCCCCCCCCF\"___,,,,___        " TNRM,
+	"   "TWHT"\\\\N\\\\\\\\"TLRD"XCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCOOOOPYvv.  " TNRM,
+	"    "TWHT"\\\\N\\\\\\\\"TLRD"XCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCPF\"''            " TNRM,
+	"     "TWHT"\\\\N\\\\\\\\"TLRD"XCCCCCCCCCCCCCCCCCCCCCCCCCOF\"'                  " TNRM,
+	"      "TWHT"\\\\N\\\\\\\\"TLRD"XCCCCCCCCCCCCCCCCCCCCOF\"'                      " TNRM,
+	"       "TWHT"\\\\N\\\\\\\\"TLRD"XCCCCCCCCCCCCCCCPF\"'                          " TNRM,
+	"        "TWHT"\\\\N\\\\\\\\"TLRD"\"PCOCCCOCCFP\"\"                               " TNRM,
+	"         "TWHT"\\\\N\\                                               " TNRM,
+	"          "TWHT"\\\\N\\                                              " TNRM,
+	"           "TWHT"\\\\N\\                                             " TNRM,
+	"            "TWHT"\\\\NN\\                                           " TNRM,
+	"             "TWHT"\\\\NN\\                                          " TNRM,
+	"              "TWHT"\\\\NNA.                                        " TNRM,
+	"               "TWHT"\\\\NNA,                                       " TNRM,
+	"                "TWHT"\\\\NNN,                                      " TNRM,
+	"                 "TWHT"\\\\NNN\\                                     " TNRM,
 	"                  "TWHT"\\\\NNN\\ " TNRM,
 	"                   "TWHT"\\\\NNNA" TNRM
 };
@@ -341,7 +342,7 @@ char *netbsd_logo[] =
 /* 18 */
 char *mandriva_mandrake_logo[] =
 {
-	"                                          " TNRM,
+	"                                         " TNRM,
 	""TYLW"                         ``              " TNRM,
 	""TYLW"                        `-.              " TNRM,
 	""TLBL"       `               "TYLW".---              " TNRM,
@@ -387,8 +388,8 @@ char *opensuse_logo[] =
 /* 21 */
 char *slackware_logo[] =
 {
-	""TLBL"                   :::::::",
-	""TLBL"             :::::::::::::::::::               " TNRM,
+	""TLBL"                   :::::::		      " TNRM,
+	""TLBL"             :::::::::::::::::::              " TNRM,
 	""TLBL"          :::::::::::::::::::::::::           " TNRM,
 	""TLBL"        ::::::::"TWHT"cllcccccllllllll"TLBL"::::::        " TNRM,
 	""TLBL"     :::::::::"TWHT"lc               dc"TLBL":::::::      " TNRM,
@@ -413,7 +414,7 @@ char *slackware_logo[] =
 /* 18 */
 char *redhat_logo[] =
 {
-	"                                           " TNRM,
+	"                                          " TNRM,
 	""TLRD"              `.-..........`              " TNRM,
 	""TLRD"             `////////::.`-/.             " TNRM,
 	""TLRD"             -: ....-////////.            " TNRM,
@@ -464,7 +465,7 @@ char *frugalware_logo[] =
 /* 19 */
 char *peppermint_logo[] =
 {
-	""TLRD"             8ZZZZZZ"TWHT"MMMMM               " TNRM,
+	""TLRD"             8ZZZZZZ"TWHT"MMMMM              " TNRM,
 	""TLRD"          .ZZZZZZZZZ"TWHT"MMMMMMM.           " TNRM,
 	""TWHT"        MM"TLRD"ZZZZZZZZZ"TWHT"MMMMMMM"TLRD"ZZZZ         " TNRM,
 	""TWHT"      MMMMM"TLRD"ZZZZZZZZ"TWHT"MMMMM"TLRD"ZZZZZZZM       " TNRM,
@@ -488,7 +489,7 @@ char *peppermint_logo[] =
 /* 18 */
 char *solusos_logo[] =
 {
-	""TWHT"               e         e      " TNRM,
+	""TWHT"               e         e     " TNRM,
 	""TWHT"             eee       ee      " TNRM,
 	""TWHT"            eeee     eee       " TNRM,
 	""TDGY"        wwwwwwwww"TWHT"eeeeee        " TNRM,
@@ -511,7 +512,7 @@ char *solusos_logo[] =
 /* 18 */
 char *mageia_logo[] = 
 {
-	""TLCY"               .°°.               " TNRM,
+	""TLCY"               .°°.              " TNRM,
 	""TLCY"                °°   .°°.        " TNRM,
 	""TLCY"                .°°°. °°         " TNRM,
 	""TLCY"                .   .            " TNRM,
@@ -535,7 +536,7 @@ char *mageia_logo[] =
 /* 18 */
 char *parabolagnu_linuxlibre_logo[] = 
 {
-	"                                  " TNRM,
+	"                                 " TNRM,
 	""TLPR"              eeeeeeeee          " TNRM,
 	""TLPR"          eeeeeeeeeeeeeee        " TNRM,
 	""TLPR"       eeeeee"TWHT"//////////"TLPR"eeeee     " TNRM,
@@ -558,7 +559,7 @@ char *parabolagnu_linuxlibre_logo[] =
 /* 18 */
 char *viperr_logo[] =
 {
-	""TWHT"    wwzapd         dlzazw       " TNRM,
+	""TWHT"    wwzapd         dlzazw      " TNRM,
 	""TWHT"   an"TDGY"#"TWHT"zncmqzepweeirzpas"TDGY"#"TWHT"xz     " TNRM,
 	""TWHT" apez"TDGY"##"TWHT"qzdkawweemvmzdm"TDGY"##"TWHT"dcmv   " TNRM,
 	""TWHT"zwepd"TDGY"####"TWHT"qzdweewksza"TDGY"####"TWHT"ezqpa  " TNRM,
@@ -581,7 +582,7 @@ char *viperr_logo[] =
 /* 18 */
 char *linuxdeepin_logo[] =
 {
-	""TLGN"  eeeeeeeeeeeeeeeeeeeeeeeeeeee    " TNRM,
+	""TLGN"  eeeeeeeeeeeeeeeeeeeeeeeeeeee   " TNRM,
 	""TLGN" eee  eeeeeee          eeeeeeee  " TNRM,
 	""TLGN"ee   eeeeeeeee      eeeeeeeee ee " TNRM,
 	""TLGN"e   eeeeeeeee     eeeeeeeee    e " TNRM,
@@ -605,7 +606,7 @@ char *linuxdeepin_logo[] =
 /* 18 */
 char *chakra_logo[] =
 {
-	""TLBL"      _ _ _        \"kkkkkkkk.          " TNRM,
+	""TLBL"      _ _ _        \"kkkkkkkk.         " TNRM,
 	""TLBL"    ,kkkkkkkk.,    \'kkkkkkkkk,        " TNRM,
 	""TLBL"    ,kkkkkkkkkkkk., \'kkkkkkkkk.       " TNRM,
 	""TLBL"   ,kkkkkkkkkkkkkkkk,\'kkkkkkkk,       " TNRM,
@@ -654,7 +655,7 @@ char *fuduntu_logo[] =
 /* 16 */
 char *macosx_logo[] =
 {
-	"\n"TGRN"                 -/+:.          " TNRM,
+	"\n"TGRN"                 -/+:.         " TNRM,
 	""TGRN"                :++++.         " TNRM,
 	""TGRN"               /+++/.          " TNRM,
 	""TGRN"       .:-::- .+/:-``.::-      " TNRM,
@@ -675,7 +676,7 @@ char *macosx_logo[] =
 /* 16 */
 char *windows_logo[] =
 {
-	""TLRD"        ,.=:!!t3Z3z.,                 " TNRM,
+	""TLRD"        ,.=:!!t3Z3z.,                " TNRM,
 	""TLRD"       :tt:::tt333EE3                " TNRM,
 	""TLRD"       Et:::ztt33EEEL"TLGN" @Ee.,      .., " TNRM,
 	""TLRD"      ;tt:::tt333EE7"TLGN" ;EEEEEEttttt33# " TNRM,
@@ -696,7 +697,7 @@ char *windows_logo[] =
 /* 18 */
 char *trisquel_logo[] =
 {
-	""TLBL"                          ▄▄▄▄▄▄       " TNRM,
+	""TLBL"                          ▄▄▄▄▄▄      " TNRM,
 	""TLBL"                       ▄█████████▄    " TNRM,
 	""TLBL"       ▄▄▄▄▄▄         ████▀   ▀████   " TNRM,
 	""TLBL"    ▄██████████▄     ████▀   ▄▄ ▀███  " TNRM,
@@ -742,7 +743,7 @@ char *manjaro_logo[] =
 /* 18 */
 char *elementaryos_logo[] =
 {
-	"                                  ",
+	"                                 ",
 	""TWHT"           $?77777$$$IO          " TNRM,
 	""TWHT"        $III777ZZZZ$$$ZZ$8       " TNRM,
 	""TWHT"      ZI777           OZZZ$      " TNRM,
@@ -787,7 +788,7 @@ char *scientificlinux_logo[] =
 	""TLBL"                  '////'" TNRM
 };
 
-/* 20 */
+/* 21 */
 char *backtracklinux_logo[] =
 {
 	""TWHT"..............					" TNRM,
@@ -813,7 +814,7 @@ char *backtracklinux_logo[] =
 	""TWHT"                                             .  " TNRM
 };
 
-/* 20 */
+/* 21 */
 char *kalilinux_logo[] =
 {
 	""TLBL"..............					" TNRM,
@@ -842,7 +843,7 @@ char *kalilinux_logo[] =
 /* 18 */
 char *sabayon_logo[] =
 {
-	""TLBL"            ...........                " TNRM,
+	""TLBL"            ...........               " TNRM,
 	""TLBL"         ..             ..            " TNRM,
 	""TLBL"      ..                   ..         " TNRM,
 	""TLBL"    ..           "TWHT"o           "TLBL"..       " TNRM,

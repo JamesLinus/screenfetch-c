@@ -1,5 +1,6 @@
 /*	main.c
  *	Author: William Woodruff
+ *  Edited by: Aaron Caffrey
  *	-------------
  *
  *	screenfetch-c is a rewrite of screenFetch.sh in C.
@@ -23,11 +24,12 @@
 /* program includes */
 #include "detect.h"
 #include "disp.h"
-#include "logos.h"
 #include "colors.h"
 #include "misc.h"
 #include "util.h"
-#include "error_flag.h"
+#include "flags.h"
+#include "arrays.h"
+
 
 int main(int argc, char **argv)
 {
@@ -97,7 +99,7 @@ int main(int argc, char **argv)
 	bool logo = true, portrait = false;
 	bool verbose = false, screenshot = false;
 
-	struct option options[] =
+	static struct option options[] =
 	{
 		{ "verbose", no_argument, 0, 'v' },
 		{ "no-logo", no_argument, 0, 'n' },
@@ -141,11 +143,11 @@ int main(int argc, char **argv)
 			case 'h':
 				display_help();
 				return EXIT_SUCCESS;
-			case 'L':
-				output_logo_only(optarg);
-				return EXIT_SUCCESS;
+			// case 'L':
+			// 	output_logo_only(optarg);
+			// 	return EXIT_SUCCESS;
 			default:
-				return EXIT_FAILURE;
+					return EXIT_FAILURE;
 		}
 	}
 
@@ -164,26 +166,26 @@ int main(int argc, char **argv)
 	detect_wm(wm_str);
 	detect_wm_theme(wm_theme_str, wm_str);
 	detect_gtk(gtk_str, icon_str, font_str);
-
+	
 	/* if the user specified a different OS to display, set distro_set to it */
 	if (!STREQ(given_distro_str, "Unknown"))
 		safe_strncpy(distro_str, given_distro_str, MAX_STRLEN);
 
 	if (verbose)
-		display_verbose(detected_arr, detected_arr_names);
+		main_text_output(true);
 
 	if (portrait)
 	{
-		output_logo_only(distro_str);
-		main_text_output(detected_arr, detected_arr_names);
+		main_ascii_output(distro_str);
+		main_text_output(false);
 	}
 	else if (logo)
-		main_ascii_output(detected_arr, detected_arr_names);
+		main_ascii_output("");
 	else
-		main_text_output(detected_arr, detected_arr_names);
+		main_text_output(false);
 
 	if (screenshot)
-		take_screenshot(verbose);
+		take_screenshot(verbose, res_str);
 
 	return EXIT_SUCCESS;
 }

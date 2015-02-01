@@ -1,5 +1,6 @@
 /*	colors.h
  *	Author: William Woodruff
+ *  Edited by: Aaron Caffrey
  *	-------------
  *
  *	Macros for colorified terminal output.
@@ -9,7 +10,7 @@
 #ifndef SCREENFETCH_C_COLORS_H
 #define SCREENFETCH_C_COLORS_H
 
-#define TNRM "\x1B[0m" /* normal */
+#define TNRM "\x1B[0;0m"  /* normal */
 #define TBLK "\x1B[0;30m" /* black */
 #define TRED "\x1B[0;31m" /* red */
 #define TGRN "\x1B[0;32m" /* green */
@@ -27,4 +28,4 @@
 #define TLCY "\x1B[1;36m" /* light cyan */
 #define TWHT "\x1B[1;37m" /* white */
 
-#endif
+#endif /* SCREENFETCH_C_COLORS_H */

@@ -1,8 +1,9 @@
-/*  error_flag.h
+/*  flags.h
  *	Author: William Woodruff
+ *  Edited by: Aaron Caffrey
  *	-------------
  *	
- *	screenfetch-c's error flag is externalized in this file.
+ *	screenfetch-c's flags are externalized in this file.
  *	Like the rest of screenfetch-c, this file is licensed under the MIT license.
  */
 
@@ -10,5 +11,6 @@
 #define SCREENFETCH_C_ERROR_FLAG_H
 
 extern bool error;
+extern bool process_logo_only;
 
 #endif /* SCREENFETCH_C_ERROR_FLAG_H */

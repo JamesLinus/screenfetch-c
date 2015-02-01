@@ -1,5 +1,6 @@
 /*	util.c
  *	Author: William Woodruff
+ *  Edited by: Aaron Caffrey
  *	-------------
  *
  *	Utility functions used by screenfetch-c.
@@ -12,15 +13,87 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <time.h>
+#include <ctype.h>
 
 /* program includes */
 #include "disp.h"
 #include "misc.h"
-#include "error_flag.h"
+#include "flags.h"
+#include "arrays.h"
+#include "util.h"
 
 #if defined(__CYGWIN__)
 	#include <Windows.h>
 #endif
+
+/*	popen_raw_shell_version
+	get the raw shell version line and workaround
+	the problem when the shell version has:
+	GNU bash, version x.x.x(x)-release (x86_64-unknown-linux-gnu)
+	Even if the shell version is x.x.xx(x) it will be handled properly
+*/
+void popen_raw_shell_version(char *str1, char *str2)
+{
+	FILE *shell_file;
+	char vers_arr[MAX_STRLEN], temp_arr[MAX_STRLEN];
+	unsigned short int x = 0, z = 0;
+
+	shell_file = popen(str1, "r");
+	fgets(vers_arr, MAX_STRLEN, shell_file);
+	pclose(shell_file);
+
+	size_t str_len = strlen(vers_arr);
+
+	for (z = 0, x = 0; x < str_len; x++)
+	{
+		if (isdigit(vers_arr[x]) || vers_arr[x] == '.') /* ispunct() includes comma */
+			temp_arr[z++] = vers_arr[x];
+
+		if (isspace(vers_arr[x]) && z > 0)
+			break;
+	}
+
+	if (STREQ(str2, "bash"))
+		temp_arr[z-1] = '\0'; /* we don't want (x) in x.x.x(x) */
+	else
+		temp_arr[z] = '\0';
+
+	snprintf(shell_str, MAX_STRLEN, "%s %s", str2, temp_arr);
+
+}
+
+/*	remove_excess_cpu_txt
+	Remove unnecessary cpu text like: (tm), (TM), Processor
+	AMD Athlon(tm) II X3 455 Processor -> AMD Athlon II X3 455
+*/
+void remove_excess_cpu_txt(char *str1)
+{
+	if (!(STREQ(str1, "Unknown")) && !(STREQ(str1, "BCM2708 (Raspberry Pi)")))
+	{
+
+		unsigned short int x = 0, z = 0;
+		const char tokseps[] = " ()"; /* (TM), (tm) */
+		char temp_arr[MAX_STRLEN];
+		char *sep_str = strtok(str1, tokseps);
+
+		do
+		{
+			if (!(STREQ(sep_str, "Processor")) && !(STREQ(sep_str, "tm"))
+				&& !(STREQ(sep_str, "TM")))
+			{
+				if (z > 0)
+					temp_arr[z++] = ' ';
+
+				for (x = 0; x < strlen(sep_str); x++)
+					temp_arr[z++] = sep_str[x];
+			}
+		} while ((sep_str = strtok(NULL, tokseps)) != NULL);
+
+		temp_arr[z] = '\0';
+		snprintf(cpu_str, MAX_STRLEN, "%s", temp_arr);
+	}
+}
 
 /*	safe_strncpy
 	calls strncpy with the given params, then inserts a terminating NULL
@@ -36,17 +109,18 @@ char *safe_strncpy(char *destination, const char *source, size_t num)
 /*	split_uptime
 	splits param uptime into individual time-units
 	argument long uptime: the uptime, in seconds, to be split
-	arguments int *secs..*days: pointers to ints for storing the uptime
+	arguments int *secs..*days: pointers to unsigned ints
+	for storing the uptime
 	--
 	CAVEAT: uptime MUST be in seconds
 	--
 */
-void split_uptime(long uptime, int *secs, int *mins, int *hrs, int *days)
+void split_uptime(long uptime, unsigned int *secs, unsigned int *mins, unsigned int *hrs, unsigned int *days)
 {
-	*secs = (int) uptime % 60;
-	*mins = (int) (uptime / 60) % 60;
-	*hrs = (int) (uptime / 3600) % 24;
-	*days = (int) (uptime / 86400);
+	*secs = (unsigned int) uptime % 60;
+	*mins = (unsigned int) (uptime / 60) % 60;
+	*hrs = (unsigned int) (uptime / 3600) % 24;
+	*days = (unsigned int) (uptime / 86400);
 
 	return;
 }
@@ -54,12 +128,19 @@ void split_uptime(long uptime, int *secs, int *mins, int *hrs, int *days)
 /*	take_screenshot
 	takes a screenshot and saves it to $HOME/screenfetch_screenshot.png
 */
-void take_screenshot(bool verbose)
+void take_screenshot(bool verbose, char *monitor_res)
 {
 #if !defined(__CYGWIN__)
 	int call_status = 1;
-	char file_loc[MAX_STRLEN];
+	char file_loc[MAX_STRLEN+MAX_STRLEN];
 #endif
+
+    char time_str[MAX_STRLEN], shot_location[MAX_STRLEN], shot_str[MAX_STRLEN+MAX_STRLEN];
+    time_t t = time(NULL);
+
+    strftime(time_str, MAX_STRLEN, "%Y-%m-%d-%H%M%S", localtime(&t));
+
+    sprintf(shot_location, "/screenfetch-%s_%s.png", time_str, monitor_res);
 
 	printf("%s", "Taking shot in 3..");
 	fflush(stdout);
@@ -96,14 +177,16 @@ void take_screenshot(bool verbose)
 	DeleteDC(mem_dc);
 	*/
 #elif defined(__APPLE__) && defined(__MACH__)
-		call_status = system("screencapture -x ~/screenfetch_screenshot.png 2> /dev/null");
+		sprintf(shot_str, "screencapture -x ~%s 2> /dev/null", shot_location);
 #else
-		call_status = system("scrot ~/screenfetch_screenshot.png 2> /dev/null");
+		sprintf(shot_str, "scrot ~%s 2> /dev/null", shot_location);
 #endif
+
+	call_status = system(shot_str);
 
 #if !defined(__CYGWIN__)
 	safe_strncpy(file_loc, getenv("HOME"), MAX_STRLEN);
-	strncat(file_loc, "/screenfetch_screenshot.png", MAX_STRLEN);
+	strncat(file_loc, shot_location, MAX_STRLEN);
 
 	if (FILE_EXISTS(file_loc) && verbose)
 	{
