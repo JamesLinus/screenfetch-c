@@ -12,28 +12,27 @@
 screenfetch_c ContaineR;*/
 
 #include "colors.h"
+#include "misc.h"
 
-#define MAX_STR 128
+char host_str[MAX_STRLEN]      = "Unknown";
+char distro_str[MAX_STRLEN]    = "Unknown";
+char kernel_str[MAX_STRLEN]    = "Unknown";
+char uptime_str[MAX_STRLEN]    = "Unknown";
+char pkgs_str[MAX_STRLEN]      = "Unknown";
+char cpu_str[MAX_STRLEN]       = "Unknown";
+char gpu_str[MAX_STRLEN]       = "Unknown";
+char disk_str[MAX_STRLEN]      = "Unknown";
+char mem_str[MAX_STRLEN]       = "Unknown";
+char shell_str[MAX_STRLEN]     = "Unknown";
+char res_str[MAX_STRLEN]       = "Unknown";
+char de_str[MAX_STRLEN]        = "Unknown";
+char wm_str[MAX_STRLEN]        = "Unknown";
+char wm_theme_str[MAX_STRLEN]  = "Unknown";
+char gtk_str[MAX_STRLEN]       = "Unknown";
+char icon_str[MAX_STRLEN]      = "Unknown";
+char font_str[MAX_STRLEN]      = "Unknown";
 
-char host_str[MAX_STR]      = "Unknown";
-char distro_str[MAX_STR]    = "Unknown";
-char kernel_str[MAX_STR]    = "Unknown";
-char uptime_str[MAX_STR]    = "Unknown";
-char pkgs_str[MAX_STR]      = "Unknown";
-char cpu_str[MAX_STR]       = "Unknown";
-char gpu_str[MAX_STR]       = "Unknown";
-char disk_str[MAX_STR]      = "Unknown";
-char mem_str[MAX_STR]       = "Unknown";
-char shell_str[MAX_STR]     = "Unknown";
-char res_str[MAX_STR]       = "Unknown";
-char de_str[MAX_STR]        = "Unknown";
-char wm_str[MAX_STR]        = "Unknown";
-char wm_theme_str[MAX_STR]  = "Unknown";
-char gtk_str[MAX_STR]       = "Unknown";
-char icon_str[MAX_STR]      = "Unknown";
-char font_str[MAX_STR]      = "Unknown";
-
-char UseR[MAX_STR], HosT[MAX_STR];
+char UseR[MAX_STRLEN], HosT[MAX_STRLEN];
 
 char *detected_arr[] =
 {
